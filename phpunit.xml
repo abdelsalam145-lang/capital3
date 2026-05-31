@@ -1,0 +1,9 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+
+Route::get('/', fn () => response()->json([
+    'app'  => 'عاصمة الكون للمصاعد - FUJI-YEM Elevators',
+    'status' => 'running',
+    'api'  => '/api',
+]));

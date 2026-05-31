@@ -1,0 +1,117 @@
+erDiagram
+    CUSTOMERS ||--o{ BUILDINGS : "يملك"
+    BUILDINGS ||--o{ ELEVATORS : "يحتوي"
+    ELEVATORS ||--o{ MAINTENANCE_REQUESTS : "له طلبات"
+    CUSTOMERS ||--o{ MAINTENANCE_REQUESTS : "صاحب الطلب"
+    CUSTOMERS ||--o| USERS : "حساب دخول"
+    USERS ||--o{ MAINTENANCE_REQUESTS : "أنشأ"
+    USERS ||--o{ MAINTENANCE_REQUESTS : "فني معيّن"
+    MAINTENANCE_REQUESTS ||--o{ REQUEST_STATUS_LOGS : "سجل الحالات"
+    MAINTENANCE_REQUESTS ||--o{ REQUEST_ATTACHMENTS : "مرفقات"
+    MAINTENANCE_REQUESTS ||--o| TECHNICIAN_RATINGS : "تقييم"
+    MAINTENANCE_REQUESTS ||--o{ PART_USAGES : "قطع مستخدمة"
+    PARTS ||--o{ PART_STOCKS : "رصيد بالمستودعات"
+    PARTS ||--o{ STOCK_MOVEMENTS : "حركات"
+    PARTS ||--o{ PART_USAGES : "استُخدمت في"
+    WAREHOUSES ||--o{ PART_STOCKS : "يحتوي"
+    WAREHOUSES ||--o{ STOCK_MOVEMENTS : "مكان الحركة"
+
+    CUSTOMERS {
+        bigint id PK
+        enum type "individual|company"
+        string name
+        string phone
+        decimal latitude
+        decimal longitude
+        string tax_number
+        string national_id
+    }
+    BUILDINGS {
+        bigint id PK
+        bigint customer_id FK
+        string name
+        string manager_name
+        string manager_phone
+        decimal latitude
+        decimal longitude
+    }
+    ELEVATORS {
+        bigint id PK
+        bigint building_id FK
+        string label
+        string brand "Mitsubishi..."
+        string serial_number
+        enum status
+    }
+    USERS {
+        bigint id PK
+        string name
+        enum role "admin|supervisor|technician|customer"
+        bigint customer_id FK "للعملاء فقط"
+    }
+    MAINTENANCE_REQUESTS {
+        bigint id PK
+        string reference "REQ-2024-00001"
+        enum type "maintenance|fault|inspection"
+        bigint elevator_id FK
+        bigint customer_id FK
+        bigint created_by FK
+        bigint assigned_technician_id FK
+        bigint assigned_by FK
+        enum priority
+        enum status
+        timestamp scheduled_at
+        timestamp completed_at
+    }
+    REQUEST_STATUS_LOGS {
+        bigint id PK
+        bigint maintenance_request_id FK
+        bigint user_id FK
+        string from_status
+        string to_status
+    }
+    TECHNICIAN_RATINGS {
+        bigint id PK
+        bigint maintenance_request_id FK "unique"
+        bigint technician_id FK
+        tinyint rating "1-5"
+        text comment
+    }
+
+    PARTS {
+        bigint id PK
+        string sku "كود القطعة"
+        string name
+        decimal cost_price
+        decimal sale_price
+        decimal quantity_on_hand
+        decimal reorder_level "حد إعادة الطلب"
+    }
+    WAREHOUSES {
+        bigint id PK
+        string name
+        enum type "main|technician|branch"
+        bigint technician_id FK
+    }
+    PART_STOCKS {
+        bigint id PK
+        bigint part_id FK
+        bigint warehouse_id FK
+        decimal quantity
+    }
+    STOCK_MOVEMENTS {
+        bigint id PK
+        bigint part_id FK
+        bigint warehouse_id FK
+        enum type
+        decimal quantity "+/-"
+        decimal balance_after
+    }
+    PART_USAGES {
+        bigint id PK
+        bigint maintenance_request_id FK
+        bigint part_id FK
+        decimal quantity
+        decimal unit_price
+        boolean billed
+    }

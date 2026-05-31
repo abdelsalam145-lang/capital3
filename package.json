@@ -1,61 +1,22 @@
-# نشر لوحة المؤشرات على Vercel
-
-مشروع React (Vite) جاهز للنشر مباشرة. هناك طريقتان:
-
-## الطريقة الأولى — عبر GitHub (الأسهل والموصى بها)
-
-1. ارفع هذا المجلد (`capital-dashboard`) على مستودع GitHub (يمكن أن يكون نفس مستودعك أو مستودعاً منفصلاً للواجهة).
-
-   ```bash
-   cd capital-dashboard
-   git init
-   git add .
-   git commit -m "لوحة مؤشرات عاصمة الكون"
-   git branch -M main
-   git remote add origin <رابط-مستودعك>
-   git push -u origin main
-   ```
-
-2. ادخل على [vercel.com](https://vercel.com) وسجّل الدخول بحساب GitHub.
-
-3. اضغط **Add New → Project**، واختر المستودع.
-
-4. Vercel سيتعرّف تلقائياً أنه مشروع **Vite** (بفضل ملف `vercel.json`). لا تحتاج تغيير أي إعداد.
-
-5. اضغط **Deploy**. خلال دقيقة سيعطيك رابطاً مثل `capital-dashboard.vercel.app` — هذا رابط لوحتك الحيّة.
-
-## الطريقة الثانية — عبر سطر الأوامر
-
-```bash
-npm install -g vercel
-cd capital-dashboard
-vercel
-```
-اتبع الأسئلة، وسيرفع المشروع ويعطيك الرابط.
-
-## تشغيل محلي للتجربة قبل النشر
-
-```bash
-cd capital-dashboard
-npm install
-npm run dev      # يفتح على http://localhost:5173
-```
-
-## ربط اللوحة بالـ API الحقيقي
-
-اللوحة تعمل فوراً بالبيانات النموذجية. عند جاهزية خلفية Laravel (المنشورة على Railway/Render مثلاً)، اربطها هكذا:
-
-في Vercel: **Project Settings → Environment Variables**، أضِف:
-
-| المتغير | القيمة |
-|---------|--------|
-| `VITE_API_URL` | رابط الـ API، مثل `https://your-api.com/api` |
-| `VITE_API_TOKEN` | رمز دخول صالح (من `POST /api/login`) |
-
-ثم أعِد النشر (Redeploy). ستتحول اللوحة تلقائياً لعرض البيانات الحيّة، ويظهر في التذييل "بيانات مباشرة من النظام".
-
-> ملاحظة: في الإنتاج الفعلي يُفضّل ألا يُخزَّن الرمز كمتغير ثابت، بل أن تُضاف شاشة تسجيل دخول للوحة تجلب الرمز ديناميكياً. هذه خطوة لاحقة يمكنني مساعدتك بها عند ربط الخلفية.
-
-## ملاحظة مهمة (CORS)
-
-عند الربط بالـ API الحقيقي، تأكّد أن خلفية Laravel تسمح بطلبات من نطاق Vercel. في `config/cors.php` (أو إعداد CORS في Laravel) أضِف رابط لوحتك على Vercel ضمن `allowed_origins`.
+{
+  "name": "capital-dashboard",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Capital Dashboard - FUJI-YEM Elevators",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "recharts": "^2.12.7",
+    "lucide-react": "^0.383.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.1",
+    "vite": "^5.3.4"
+  }
+}
